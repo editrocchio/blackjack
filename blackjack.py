@@ -1,8 +1,5 @@
 import random
 
-player_cards = []
-split = False
-
 def create_deck():
     
     deck_vals = {}
@@ -16,19 +13,37 @@ def create_deck():
     for x in face:
         for y in suits:
             deck_vals.update({x + y:10})
-            deck_vals.update({'A' + y:11})
 
-    keys = deck_vals.keys()
-    random.shuffle(keys)
-    display_deck = [(key, deck_vals[key]) for key in keys]
+    for y in suits:
+        deck_vals.update({'A' + y:11})
+    
+    items = deck_vals.items()
+    random.shuffle(items)
+    
+    return items
 
-    return display_deck
+def win_loss(card_set):
+    global play
+    c = 0
+    for card in card_set:
+        c += int(card[1])
+        if c == 21:
+            print "you win"
+            play = False
+        elif c > 21:
+            print "you lose"
+            play = False
+        else:
+            pass
 
-def blackjack(card1, card2):
-    if card1 + card2 == 21:
-        print 'you win'
-    else:
-        p1.choice()
+def display_cards(card_set):
+    x = []
+    for card in card_set:
+        x.append(card[0])
+
+    print "Here are your cards:\n" + str(x)
+
+    win_loss(player_cards)
          
 class Player:
 
@@ -37,42 +52,33 @@ class Player:
         self.money = []
 
     def deal(self, created_deck):
-        print "Here are your cards, " + self.name
-        
-        c1 = random.choice(created_deck)
-        c2 = random.choice(created_deck)
-
-        if c1[1] == c2[1]:
-            split = True
-            
-        player_cards.append(c1[0] + ', ' + c2[0])
-
-        created_deck.remove(c1)
-        created_deck.remove(c2)
-        
-        print player_cards
-        
-
-        #Check for blackjack
-        blackjack(c1[1], c2[1])
-
-    
+        count = 0
+        while count < 2:
+            chosen_card = random.choice(created_deck)
+            created_deck.remove(chosen_card)
+            count += 1
+            player_cards.append(chosen_card)
+                   
+        display_cards(player_cards)
+           
     def choice(self):
-        while True:
-            if split == True:
-                s = raw_input("Do you want to split? [y/n]")
+        while play:
+          #  if split == True:
+           #     s = raw_input("Do you want to split? [y/n]")
                 
             c = raw_input("Do you want to [h]it or [s]tand?")
             if c.lower() == "h":
-                new_card = random.choice(deck)
-                cards.append(new_card)
-                deck.remove(new_card)
-                print cards
-           # elif c.lower() == "s"
-    
-
-p1 = Player('emilio', 30)
+                new_card = random.choice(create_deck())
+                player_cards.append(new_card)
+                display_cards(player_cards)
+                
+    #        elif c.lower() == "s":
+                
+play = True
+split = False
+player_cards = []
+p1 = Player('bob', 30)
 p1.deal(create_deck())
-
+p1.choice()
 
 
