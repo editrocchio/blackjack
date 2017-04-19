@@ -21,64 +21,79 @@ def create_deck():
     random.shuffle(items)
     
     return items
+        
+class Player(object):
 
-def win_loss(card_set):
-    global play
-    c = 0
-    for card in card_set:
-        c += int(card[1])
-        if c == 21:
-            print "you win"
-            play = False
-        elif c > 21:
-            print "you lose"
-            play = False
-        else:
-            pass
+    player_cards = []
+    dealer_cards = []
 
-def display_cards(card_set):
-    x = []
-    for card in card_set:
-        x.append(card[0])
-
-    print "Here are your cards:\n" + str(x)
-
-    win_loss(player_cards)
-         
-class Player:
-
-    def __init__(self, name, money):
-        self.name = name.title()
+    def __init__(self, money):
         self.money = []
 
-    def deal(self, created_deck):
-        count = 0
-        while count < 2:
-            chosen_card = random.choice(created_deck)
-            created_deck.remove(chosen_card)
-            count += 1
-            player_cards.append(chosen_card)
-                   
-        display_cards(player_cards)
+    def win_loss(self, p_cards, d_cards):
+        global play
+        p = 0
+        d = 0
+        for card in p_cards:
+            p += int(card[1])
+        for card in d_cards:
+            d += int(card[1])
+        
+        if p == 21 and d == 21:
+            print "Push."
+            play = False
+        elif p == 21 and d != 21:
+            print "Blackjack!"
+            play = False
+        elif p != 21 and d == 21:
+            print "Dealer has blackjack, you lose."
+            play = False
+        elif p > 21:
+            print "You bust."
+            play = False
+        else:       
+            pass
+    
+    def display_cards(self, p_cards, d_cards):
+        x = []
+        y = []
+        for card in p_cards:
+            x.append(card[0])
+        for card in d_cards:
+            y.append(card[0])
+        
+        print "Here are your cards:\n" + str(x) + "\nHere is " \
+              "the dealer card:\n" + str(y[0])
+           
+        self.win_loss(self.player_cards, self.dealer_cards)
            
     def choice(self):
         while play:
-          #  if split == True:
-           #     s = raw_input("Do you want to split? [y/n]")
-                
-            c = raw_input("Do you want to [h]it or [s]tand?")
+            c = raw_input("Do you want to [h]it or [s]tand? ")
             if c.lower() == "h":
                 new_card = random.choice(create_deck())
-                player_cards.append(new_card)
-                display_cards(player_cards)
+                self.player_cards.append(new_card)
+                self.display_cards(self.player_cards, self.dealer_cards)
                 
-    #        elif c.lower() == "s":
-                
+class Dealer(Player):
+   
+    def deal(self, created_deck):
+        count = 0
+        while count < 2:
+            chosen_card = deck.pop(0)
+            self.player_cards.append(chosen_card)
+            chosen_card = deck.pop(0)
+            self.dealer_cards.append(chosen_card)
+            count += 1
+                   
+        self.display_cards(self.player_cards, self.dealer_cards)
+
+deck = create_deck()
 play = True
-split = False
-player_cards = []
-p1 = Player('bob', 30)
-p1.deal(create_deck())
-p1.choice()
+player = Player(30)
+dealer = Dealer(30)
+dealer.deal(deck)
+player.choice()
+
 
 
