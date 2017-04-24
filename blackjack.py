@@ -33,18 +33,18 @@ class Mechanics(object):
         for card in d_cards:
             d += int(card[1])
             disp.append(card[0])
-        if p == 21 and d == 21:
+        if p == d:
             print "Push. " + str(disp) 
             play = False
         elif p == 21 and d != 21:
-            print "Blackjack! Dealer's turn..."
+            print "Blackjack! Dealer's turn... Dealer cards: " + str(disp)
             dealer.self_deal(dealer.dealer_cards)
             play = False
         elif p != 21 and d == 21:
             print "Dealer has blackjack, you lose. " + str(disp)
             play = False
         elif p > 21:
-            print "You bust."
+            print "You bust. Dealer cards: " + str(disp) 
             play = False
         else:       
             pass
