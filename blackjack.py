@@ -31,7 +31,7 @@ class Mechanics(object):
         for card in p_cards:
             p += int(card[1])
         for card in d_cards:
-          #  d += int(card[1])
+            d += int(card[1])
             disp.append(card[0])
         if p == 21 and d == 21:
             print "Push. " + str(disp) 
