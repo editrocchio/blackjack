@@ -44,8 +44,7 @@ class Mechanics(object):
                     d += int(card[1][0])
                 elif d + int(card[1][0]) > 21:
                     d += int(card[1][1])
-                    
-        #One final check
+
         for card in card_set_p:
             if 'A' in card[0] and p > 21 and end == False:
                 p -= 10
@@ -67,35 +66,17 @@ class Mechanics(object):
 
         p_checked, d_checked = self.ace_check(p_cards, d_cards)
 
-        print p_checked
-        print d_checked
-                
         disp = []
         for card in d_cards:
-<<<<<<< HEAD
             disp.append(card[0])
             
         if p_checked == 21 and d_checked != 21:
             print "Blackjack! You win. Dealer cards: " + str(disp)
-=======
-            d += int(card[1])
-            disp.append(card[0])
-        if p == d:
-            print "Push. " + str(disp) 
-            play = False
-        elif p == 21 and d != 21:
-            print "Blackjack! Dealer's turn... Dealer cards: " + str(disp)
-            dealer.self_deal(dealer.dealer_cards)
->>>>>>> ff13fc71c1b93562b45730aa5056eb3a7bceacdf
             play = False
         elif p_checked != 21 and d_checked == 21:
             print "Dealer has blackjack, you lose. " + str(disp)
             play = False
-<<<<<<< HEAD
         elif p_checked > 21:
-=======
-        elif p > 21:
->>>>>>> ff13fc71c1b93562b45730aa5056eb3a7bceacdf
             print "You bust. Dealer cards: " + str(disp) 
             play = False
 
@@ -190,6 +171,3 @@ play = True
 
 dealer.deal(deck)
 player.choice()
-
-
-
