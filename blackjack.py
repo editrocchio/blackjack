@@ -71,15 +71,30 @@ class Mechanics(object):
                 
         disp = []
         for card in d_cards:
+<<<<<<< HEAD
             disp.append(card[0])
             
         if p_checked == 21 and d_checked != 21:
             print "Blackjack! You win. Dealer cards: " + str(disp)
+=======
+            d += int(card[1])
+            disp.append(card[0])
+        if p == d:
+            print "Push. " + str(disp) 
+            play = False
+        elif p == 21 and d != 21:
+            print "Blackjack! Dealer's turn... Dealer cards: " + str(disp)
+            dealer.self_deal(dealer.dealer_cards)
+>>>>>>> ff13fc71c1b93562b45730aa5056eb3a7bceacdf
             play = False
         elif p_checked != 21 and d_checked == 21:
             print "Dealer has blackjack, you lose. " + str(disp)
             play = False
+<<<<<<< HEAD
         elif p_checked > 21:
+=======
+        elif p > 21:
+>>>>>>> ff13fc71c1b93562b45730aa5056eb3a7bceacdf
             print "You bust. Dealer cards: " + str(disp) 
             play = False
 
