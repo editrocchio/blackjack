@@ -44,7 +44,8 @@ class Mechanics(object):
                     d += int(card[1][0])
                 elif d + int(card[1][0]) > 21:
                     d += int(card[1][1])
-
+                    
+        #One final check
         for card in card_set_p:
             if 'A' in card[0] and p > 21 and end == False:
                 p -= 10
