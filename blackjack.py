@@ -16,56 +16,86 @@ class Mechanics(object):
                 deck_vals.update({x + y:10})
 
         for y in suits:
-            deck_vals.update({'A' + y:11})
+            deck_vals.update({'A' + y:[11,1]})
         
         items = deck_vals.items()
         random.shuffle(items)
         
         return items
+    
+    def ace_check(self, card_set_p, card_set_d):
+        p = 0
+        d = 0
+        end = False
+        for card in card_set_p:
+            if 'A' not in card[0]:
+                p += int(card[1])
+            elif 'A' in card[0]:
+                if p + int(card[1][0]) <= 21:
+                    p += int(card[1][0])
+                elif p + int(card[1][0]) > 21:
+                    p += int(card[1][1])
+
+        for card in card_set_d:
+            if 'A' not in card[0]:
+                d += int(card[1])
+            elif 'A' in card[0]:
+                if d + int(card[1][0]) <= 21:
+                    d += int(card[1][0])
+                elif d + int(card[1][0]) > 21:
+                    d += int(card[1][1])
+
+        for card in card_set_p:
+            if 'A' in card[0] and p > 21 and end == False:
+                p -= 10
+                end = True
+            else:
+                pass
+
+        for card in card_set_d:
+            if 'A' in card[0] and d > 21 and end == False:
+                d -= 10
+                end = True
+            else:
+                pass
+
+        return p, d
 
     def win_loss(self, p_cards, d_cards):
         global play
-        p = 0
-        d = 0
+
+        p_checked, d_checked = self.ace_check(p_cards, d_cards)
+
+        print p_checked
+        print d_checked
+                
         disp = []
-        for card in p_cards:
-            p += int(card[1])
         for card in d_cards:
-          #  d += int(card[1])
             disp.append(card[0])
-        if p == 21 and d == 21:
-            print "Push. " + str(disp) 
+            
+        if p_checked == 21 and d_checked != 21:
+            print "Blackjack! You win. Dealer cards: " + str(disp)
             play = False
-        elif p == 21 and d != 21:
-            print "Blackjack! Dealer's turn..."
-            dealer.self_deal(dealer.dealer_cards)
-            play = False
-        elif p != 21 and d == 21:
+        elif p_checked != 21 and d_checked == 21:
             print "Dealer has blackjack, you lose. " + str(disp)
             play = False
-        elif p > 21:
-            print "You bust."
+        elif p_checked > 21:
+            print "You bust. Dealer cards: " + str(disp) 
             play = False
-        else:       
-            pass
 
     def stand_check(self, p_cards, d_cards):
-        p = 0
-        d = 0
-        for card in p_cards:
-            p += int(card[1])
-        for card in d_cards:
-            d += int(card[1])
 
-        print "Your total: " + str(p) + "\nDealer total: " + str(d)
+        p_checked, d_checked = self.ace_check(p_cards, d_cards)
+
+        print "Your total: " + str(p_checked) + "\nDealer total: " + str(d_checked)
             
-        if p == 21 and d == 21:
+        if p_checked == d_checked:
             print "Push."
-        elif p > d:
+        elif p_checked > d_checked:
             print "You win!"
-        elif d > p:
+        elif d_checked > p_checked:
             print "You lose."
-        elif p != 21 and d == 21:
+        elif p_checked != 21 and d_checked == 21:
             print "Dealer has blackjack, you lose."
 
 class Player(object):
@@ -106,21 +136,19 @@ class Dealer(object):
 
     def self_deal(self, d_cards):
         while True:
-            d = 0
-            for card in d_cards:
-                d += card[1]
-            if d < 17:
+            p_checked, d_checked = mechanics.ace_check(player.player_cards, d_cards)
+            if d_checked < 17:
                 new_card = deck.pop(0)
                 self.dealer_cards.append(new_card)
                 print "Dealing... " + new_card[0]
-            elif d > 21:
-                print "Dealer busts at " + str(d)
+            elif d_checked > 21:
+                print "Dealer busts at " + str(d_checked)
                 break
-            elif d >= 17 and d < 21:
-                print "Dealer stands at " + str(d)
+            elif d_checked >= 17 and d_checked < 21:
+                print "Dealer stands at " + str(d_checked)
                 mechanics.stand_check(player.player_cards, dealer.dealer_cards)
                 break
-            elif d == 21:
+            elif d_checked == 21:
                 print "Dealer has blackjack, you lose. " 
                 break
 
@@ -141,6 +169,7 @@ mechanics = Mechanics()
 player = Player(30)
 dealer = Dealer()
 deck = mechanics.create_deck()
+
 play = True
 
 dealer.deal(deck)
