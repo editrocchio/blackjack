@@ -4,6 +4,8 @@ import time
 class Mechanics(object):
     
     def create_deck(self):
+        #Generate numbers from 2-10 and give them suits. Stores them in dict with their values.
+        #Do the same for the face cards. Give aces a value of 11.
         deck_vals = {}
         suits = ['D', 'H', 'S', 'C']
         face = ['J', 'Q', 'K']
@@ -25,6 +27,7 @@ class Mechanics(object):
         return items
     
     def ace_check(self, card_set_p, card_set_d):
+        #Add up the value of all cards, and number of aces. For each ace, subtract 10 until value is less than 21.
         p = 0
         d = 0
         ace_count_p = 0
@@ -53,6 +56,8 @@ class Mechanics(object):
         return p, d
 
     def win_loss(self, p_cards, d_cards):
+        #Basic check  for win conditions, if cards are both 21, either player or dealer has 21,
+        #or player has higher than 21, end the player's choice and restart the round.
         global play
 
         p_checked, d_checked = self.ace_check(p_cards, d_cards)
@@ -91,7 +96,7 @@ class Mechanics(object):
         
 
     def stand_check(self, p_cards, d_cards):
-
+        #Compares dealer cards to player cards on stand.
         p_checked, d_checked = self.ace_check(p_cards, d_cards)
 
         print "Your total: " + str(p_checked) + "\nDealer total: " + str(d_checked)
@@ -121,6 +126,8 @@ class Player(object):
         self.money = money
            
     def choice(self):
+        #If hit, add new card and call display_cards, which calls win_loss function to check for win conditions.
+        #If stand, call stand_check to check for win conditions.
         global play
         while play:
             c = raw_input("Do you want to [h]it or [s]tand? ")
